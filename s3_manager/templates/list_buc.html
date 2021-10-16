@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>S3 Manager</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css" integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+.w3-bar,h1,button {font-family: "Montserrat", sans-serif}
+.fa-anchor,.fa-coffee {font-size:200px}
+</style>
+
+<body>
+
+<!-- Header -->
+<header class="w3-container w3-red w3-center" style="padding:128px 16px">
+  <h1 class="w3-margin w3-jumbo">S3 Manager</h1>
+  <p class="w3-xlarge">prepared by: Deepak Rai</p>
+    {% with messages = get_flashed_messages() %}
+       {% if messages %}
+           <p class="bg-info" style="padding: 15px;">
+             {% for message in messages %}
+                {{ message }}<br>
+             {% endfor %}
+           </p>
+       {% endif %}
+    {% endwith %}
+  <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top"><a href="http://127.0.0.1:5000/new_bucket" >Click Here to create a new bucket</a></button>
+</header>
+
+<!-- First Grid -->
+<div class="w3-row-padding w3-padding-64 w3-container">
+  <div class="w3-content">
+    <div class="w3-twothird">
+      <div class="row">
+          <div class="col-12-xs"><style>
+            table {
+              font-family: arial, sans-serif;
+              border-collapse: collapse;
+              width: 100%;
+            }
+            
+            td, th {
+              border: 1px solid #dddddd;
+              text-align: left;
+              padding: 8px;
+            }
+            
+            tr:nth-child(even) {
+              background-color: #dddddd;
+            }
+
+            </style>
+            <h1>List of available buckets:</h1>
+            <table>
+                <tr>
+                    <th>Bucket Name</th>
+                    <th>Created</th>
+                    <th>Explore</th>
+                    <th>Empty</th>
+                    <th>Delete</th>
+                </tr>
+
+                {% for bucket in buckets %}
+                    <tr>
+                        <td>{{ bucket['Name'] }}</td>
+                        <td>{{ bucket['CreationDate'] | datetimeformat }}</td>
+                        <td>
+                            <form class="select-form" action="{{ url_for('user') }}" method="POST">
+                                <input type="hidden" name="bucket" value="{{bucket['Name'] }}" />
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-archive"></i>
+                                </button> 
+                            </form>
+                        </td>
+                        <td>
+                            <form class="empty-form" action="{{ url_for('empty_bucket') }}" method="POST">
+                                <input type="hidden" name="bucket" value="{{bucket['Name'] }}" />
+                                <button type="submit">Empty</button>
+                              </form>
+                        </td>
+                        <td>
+                            <form class="delete-form" action="{{ url_for('delete_bucket') }}" method="POST">
+                                <input type="hidden" name="bucket" value="{{bucket['Name'] }}" />
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                  <i class="fa fa-trash-alt"></i>
+                                </button>
+                              </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+          </div>
+      </div>
+    </div>
+
+    <div class="w3-third w3-center">
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-center w3-opacity">  
+  <div class="w3-xlarge w3-padding-32">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+ </div>
+ <h1>Note: Before deleting a bucket, kindly make sure that bucket is empty.</h1>
+ <p>Powered by <a href="https://www.sigmoid.com/" target="_blank">Sigmoid</a></p>
+</footer>
+
+</body>
+</html>
